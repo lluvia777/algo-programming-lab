@@ -1,0 +1,83 @@
+digraph Hospital_System {
+    rankdir=TB;
+    node [fontname="Helvetica", fontsize=10];
+    
+    Start [shape=oval, label="START"];
+    End [shape=oval, label="END"];
+    
+    MainMenu [shape=parallelogram, label="PRINT '1: Appointment, 2: Test Results'\nREAD menu_choice"];
+    MenuCheck [shape=diamond, label="menu_choice?"];
+    InvalidChoice [shape=parallelogram, label="PRINT 'Invalid choice'"];
+    
+    Start -> MainMenu;
+    MainMenu -> MenuCheck;
+    MenuCheck -> InvalidChoice [label="Other"];
+    InvalidChoice -> End;
+    
+    // Subgraph 1: Appointment System
+    subgraph cluster_appointment {
+        label = "Appointment System";
+        style = dashed;
+        color = blue;
+        
+        ApptID [shape=parallelogram, label="READ patient_id"];
+        ApptVerify [shape=diamond, label="verify_identity == TRUE?"];
+        ApptFail [shape=parallelogram, label="PRINT 'Verification Failed'"];
+        SelectClinic [shape=parallelogram, label="READ clinic"];
+        SelectDoctor [shape=parallelogram, label="READ doctor"];
+        SelectSlot [shape=parallelogram, label="READ time_slot"];
+        ApptConfirm [shape=diamond, label="confirm == 'YES'?"];
+        SendSMS [shape=box, label="Confirm & Send SMS"];
+        CancelAppt [shape=parallelogram, label="PRINT 'Cancelled'"];
+        
+        ApptID -> ApptVerify;
+        ApptVerify -> SelectClinic [label="YES"];
+        ApptVerify -> ApptFail [label="NO"];
+        SelectClinic -> SelectDoctor;
+        SelectDoctor -> SelectSlot;
+        SelectSlot -> ApptConfirm;
+        ApptConfirm -> SendSMS [label="YES"];
+        ApptConfirm -> CancelAppt [label="NO"];
+    }
+    
+    // Subgraph 2: Test Result System
+    subgraph cluster_tests {
+        label = "Test Result System";
+        style = dashed;
+        color = green;
+        
+        TestID [shape=parallelogram, label="READ patient_id"];
+        TestVerify [shape=diamond, label="verify_identity == TRUE?"];
+        TestFail [shape=parallelogram, label="PRINT 'Verification Failed'"];
+        TestsExist [shape=diamond, label="tests_exist == TRUE?"];
+        NoTests [shape=parallelogram, label="PRINT 'No tests found'"];
+        ResultsReady [shape=diamond, label="results_ready == TRUE?"];
+        WaitMessage [shape=parallelogram, label="PRINT 'Results not ready'"];
+        ShowResults [shape=parallelogram, label="PRINT 'Displaying Results'"];
+        AskPDF [shape=diamond, label="download_pdf == 'YES'?"];
+        DownloadPDF [shape=box, label="Download PDF"];
+        
+        TestID -> TestVerify;
+        TestVerify -> TestsExist [label="YES"];
+        TestVerify -> TestFail [label="NO"];
+        TestsExist -> ResultsReady [label="YES"];
+        TestsExist -> NoTests [label="NO"];
+        ResultsReady -> ShowResults [label="YES"];
+        ResultsReady -> WaitMessage [label="NO"];
+        ShowResults -> AskPDF;
+        AskPDF -> DownloadPDF [label="YES"];
+    }
+    
+    MenuCheck -> ApptID [label="1"];
+    MenuCheck -> TestID [label="2"];
+    
+    ApptFail -> End;
+    SendSMS -> End;
+    CancelAppt -> End;
+    
+    TestFail -> End;
+    NoTests -> End;
+    WaitMessage -> End;
+    DownloadPDF -> End;
+    AskPDF -> End [label="NO"];
+}
