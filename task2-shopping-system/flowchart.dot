@@ -1,0 +1,84 @@
+digraph Shopping_System {
+    rankdir=TB;
+    node [fontname="Helvetica", fontsize=10];
+    
+    Start [shape=oval, label="START"];
+    End [shape=oval, label="END"];
+    
+    InitVars [shape=box, label="Initialize Variables:\nlogged_in=FALSE, cart_total=0,\nshopping_complete=FALSE"];
+    
+    LoginPrompt [shape=parallelogram, label="PRINT 'Please log in'\nREAD credentials"];
+    LoginCheck [shape=diamond, label="credentials == valid?"];
+    SetLoginTrue [shape=box, label="logged_in = TRUE"];
+    LoginError [shape=parallelogram, label="PRINT 'Invalid login'"];
+    
+    ProductPrompt [shape=parallelogram, label="PRINT 'Enter product or DONE'\nREAD product_input"];
+    CheckDone [shape=diamond, label="product_input == 'DONE'?"];
+    SetShoppingComplete [shape=box, label="shopping_complete = TRUE"];
+    CheckStock [shape=diamond, label="stock > 0?"];
+    AddCart [shape=box, label="cart_total = cart_total + price\nDecrease stock by 1"];
+    PrintAdded [shape=parallelogram, label="PRINT 'Product added'"];
+    StockError [shape=parallelogram, label="PRINT 'Out of stock'"];
+    
+    AskDiscount [shape=parallelogram, label="PRINT 'Discount code?'\nREAD has_discount"];
+    CheckHasDiscount [shape=diamond, label="has_discount == 'YES'?"];
+    ReadCode [shape=parallelogram, label="READ code"];
+    CheckCode [shape=diamond, label="code == valid_code?"];
+    ApplyDiscount [shape=box, label="cart_total = cart_total - discount"];
+    InvalidCode [shape=parallelogram, label="PRINT 'Invalid code'"];
+    
+    CheckShipping [shape=diamond, label="cart_total < 500?"];
+    AddShipping [shape=box, label="cart_total = cart_total + 50"];
+    FreeShipping [shape=parallelogram, label="PRINT 'Free shipping!'"];
+    
+    ShowTotal [shape=parallelogram, label="PRINT 'Total to pay'\nREAD process_payment"];
+    CheckPayment [shape=diamond, label="process_payment == 'YES'?"];
+    Success [shape=parallelogram, label="PRINT 'Payment successful'"];
+    Cancel [shape=parallelogram, label="PRINT 'Payment cancelled'"];
+
+    // Connections with YES/NO Labels
+    Start -> InitVars;
+    InitVars -> LoginPrompt;
+    
+    LoginPrompt -> LoginCheck;
+    LoginCheck -> SetLoginTrue [label="YES"];
+    LoginCheck -> LoginError [label="NO"];
+    LoginError -> LoginPrompt;
+    SetLoginTrue -> ProductPrompt;
+    
+    ProductPrompt -> CheckDone;
+    CheckDone -> SetShoppingComplete [label="YES"];
+    CheckDone -> CheckStock [label="NO"];
+    
+    CheckStock -> AddCart [label="YES"];
+    AddCart -> PrintAdded;
+    PrintAdded -> ProductPrompt;
+    
+    CheckStock -> StockError [label="NO"];
+    StockError -> ProductPrompt;
+    
+    SetShoppingComplete -> AskDiscount;
+    
+    AskDiscount -> CheckHasDiscount;
+    CheckHasDiscount -> ReadCode [label="YES"];
+    CheckHasDiscount -> CheckShipping [label="NO"];
+    
+    ReadCode -> CheckCode;
+    CheckCode -> ApplyDiscount [label="YES"];
+    ApplyDiscount -> CheckShipping;
+    CheckCode -> InvalidCode [label="NO"];
+    InvalidCode -> CheckShipping;
+    
+    CheckShipping -> AddShipping [label="YES"];
+    CheckShipping -> FreeShipping [label="NO"];
+    
+    AddShipping -> ShowTotal;
+    FreeShipping -> ShowTotal;
+    
+    ShowTotal -> CheckPayment;
+    CheckPayment -> Success [label="YES"];
+    CheckPayment -> Cancel [label="NO"];
+    
+    Success -> End;
+    Cancel -> End;
+}
