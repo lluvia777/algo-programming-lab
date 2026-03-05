@@ -1,0 +1,72 @@
+digraph ATM_System {
+    // Node definitions based on requested shapes
+    node [fontname="Helvetica", fontsize=10];
+    
+    Start [shape=oval, label="START"];
+    End [shape=oval, label="END"];
+    
+    InitVars [shape=box, label="Initialize Variables:\nattempts=0, authenticated=FALSE"];
+    IncAttempts [shape=box, label="attempts = attempts + 1"];
+    SetAuth [shape=box, label="authenticated = TRUE"];
+    InitRepeat [shape=box, label="continue_transaction = 'YES'"];
+    ProcessWithdrawal [shape=box, label="balance = balance - amount\ndaily_limit = daily_limit - amount"];
+    
+    PromptPIN [shape=parallelogram, label="PRINT 'Enter PIN'\nREAD input_PIN"];
+    ShowRemainingAttempts [shape=parallelogram, label="PRINT 'Incorrect PIN. Attempts remaining'"];
+    CardRetained [shape=parallelogram, label="PRINT 'Card retained'"];
+    PromptAmount [shape=parallelogram, label="PRINT 'Enter amount'\nREAD amount"];
+    ShowMultipleErr [shape=parallelogram, label="PRINT 'Error: Must be multiple of 20TL'"];
+    ShowLimitErr [shape=parallelogram, label="PRINT 'Error: Exceeds daily limit'"];
+    ShowBalErr [shape=parallelogram, label="PRINT 'Error: Insufficient balance'"];
+    DispenseCash [shape=parallelogram, label="PRINT 'Take cash & New Balance'"];
+    PromptRepeat [shape=parallelogram, label="PRINT 'Another transaction?'\nREAD continue_transaction"];
+    EndMessage [shape=parallelogram, label="PRINT 'Take your card'"];
+    
+    CheckAttemptsLoop [shape=diamond, label="attempts < 3 AND\nauthenticated == FALSE?"];
+    CheckPIN [shape=diamond, label="input_PIN == correct_PIN?"];
+    IsAuth [shape=diamond, label="authenticated == TRUE?"];
+    CheckRepeatLoop [shape=diamond, label="continue_transaction == 'YES'?"];
+    CheckMultiple [shape=diamond, label="amount % 20 == 0?"];
+    CheckLimit [shape=diamond, label="amount <= daily_limit?"];
+    CheckBalance [shape=diamond, label="amount <= balance?"];
+
+    // Connections
+    Start -> InitVars;
+    InitVars -> CheckAttemptsLoop;
+    
+    CheckAttemptsLoop -> PromptPIN [label="Yes"];
+    CheckAttemptsLoop -> IsAuth [label="No"];
+    
+    PromptPIN -> CheckPIN;
+    CheckPIN -> SetAuth [label="Yes"];
+    SetAuth -> CheckAttemptsLoop;
+    CheckPIN -> IncAttempts [label="No"];
+    IncAttempts -> ShowRemainingAttempts;
+    ShowRemainingAttempts -> CheckAttemptsLoop;
+    
+    IsAuth -> InitRepeat [label="Yes"];
+    IsAuth -> CardRetained [label="No"];
+    CardRetained -> End;
+    
+    InitRepeat -> CheckRepeatLoop;
+    CheckRepeatLoop -> PromptAmount [label="Yes"];
+    CheckRepeatLoop -> EndMessage [label="No"];
+    EndMessage -> End;
+    
+    PromptAmount -> CheckMultiple;
+    CheckMultiple -> CheckLimit [label="Yes"];
+    CheckMultiple -> ShowMultipleErr [label="No"];
+    ShowMultipleErr -> PromptRepeat;
+    
+    CheckLimit -> CheckBalance [label="Yes"];
+    CheckLimit -> ShowLimitErr [label="No"];
+    ShowLimitErr -> PromptRepeat;
+    
+    CheckBalance -> ProcessWithdrawal [label="Yes"];
+    CheckBalance -> ShowBalErr [label="No"];
+    ShowBalErr -> PromptRepeat;
+    
+    ProcessWithdrawal -> DispenseCash;
+    DispenseCash -> PromptRepeat;
+    PromptRepeat -> CheckRepeatLoop;
+}
