@@ -1,0 +1,47 @@
+graph TD
+    %% Shapes: ([ ]) for Oval, [ ] for Box, [/ /] for Parallelogram, { } for Diamond
+    Start([START]) --> InitVars[Initialize Variables: attempts=0, authenticated=FALSE]
+    InitVars --> CheckAttemptsLoop{attempts < 3 AND authenticated == FALSE?}
+    
+    CheckAttemptsLoop -- Yes --> PromptPIN[/PRINT 'Enter PIN', READ input_PIN/]
+    PromptPIN --> CheckPIN{input_PIN == correct_PIN?}
+    
+    CheckPIN -- Yes --> SetAuth[authenticated = TRUE]
+    SetAuth --> CheckAttemptsLoop
+    
+    CheckPIN -- No --> IncAttempts[attempts = attempts + 1]
+    IncAttempts --> ShowRemainingAttempts[/PRINT 'Incorrect PIN. Attempts remaining'/]
+    ShowRemainingAttempts --> CheckAttemptsLoop
+    
+    CheckAttemptsLoop -- No --> IsAuth{authenticated == TRUE?}
+    
+    IsAuth -- No --> CardRetained[/PRINT 'Too many attempts. Card retained'/]
+    CardRetained --> End([END])
+    
+    IsAuth -- Yes --> InitRepeat[continue_transaction = 'YES']
+    InitRepeat --> CheckRepeatLoop{continue_transaction == 'YES'}
+    
+    CheckRepeatLoop -- No --> EndMessage[/PRINT 'Take your card. Thank you.'/]
+    EndMessage --> End
+    
+    CheckRepeatLoop -- Yes --> PromptAmount[/PRINT 'Enter withdrawal amount', READ amount/]
+    PromptAmount --> CheckMultiple{amount % 20 == 0?}
+    
+    CheckMultiple -- No --> ShowMultipleErr[/PRINT 'Error: Must be multiple of 20TL'/]
+    ShowMultipleErr --> PromptRepeat
+    
+    CheckMultiple -- Yes --> CheckLimit{amount <= daily_limit?}
+    
+    CheckLimit -- No --> ShowLimitErr[/PRINT 'Error: Exceeds daily limit'/]
+    ShowLimitErr --> PromptRepeat
+    
+    CheckLimit -- Yes --> CheckBalance{amount <= balance?}
+    
+    CheckBalance -- No --> ShowBalErr[/PRINT 'Error: Insufficient balance'/]
+    ShowBalErr --> PromptRepeat
+    
+    CheckBalance -- Yes --> ProcessWithdrawal[balance = balance - amount, daily_limit = daily_limit - amount]
+    ProcessWithdrawal --> DispenseCash[/PRINT 'Take cash & New Balance'/]
+    DispenseCash --> PromptRepeat[/PRINT 'Another transaction?', READ continue_transaction/]
+    
+    PromptRepeat --> CheckRepeatLoop
