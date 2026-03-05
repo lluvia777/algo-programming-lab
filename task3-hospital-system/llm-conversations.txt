@@ -1,0 +1,11 @@
+Prompt: 
+Write an algorithm for a hospital appointment system: identity verification, clinic selection, displaying the doctor list, showing available time slots, confirming the appointment and sending an SMS. Produce pseudocode then Write an algorithm for a test result viewing system: identity verification, checking whether tests exist, checking whether results are ready, displaying results or showing a waiting message, downloading as PDF. Produce pseudocode. Final Step: Merge Connect the two modules through a main menu In DOT code you can organise each module as a separate subgraph In Mermaid you can use subgraph blocks as well 
+
+AI Response: 
+Created a unified pseudocode structure with a Main Menu branching into two independent modules (Appointment System and Test Result System). Generated Graphviz DOT code using 'subgraph cluster_name' for visual grouping and Mermaid syntax using 'subgraph ... end' blocks to visually separate the modules as requested.
+
+Prompt:
+hazirla
+
+AI Response:
+Provided the final README.md detailing the modular design and the use of subgraphs, along with the AI conversation log to wrap up Task 3.
