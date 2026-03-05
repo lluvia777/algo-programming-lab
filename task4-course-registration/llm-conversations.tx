@@ -1,0 +1,5 @@
+Prompt: 
+Explain the general flow of a university course registration system: login, course list, course selection, validation checks, and confirmation then List all the checks that must be performed during course registration: quota, prerequisites, schedule conflicts, credit limit, and advisor approval then Write detailed pseudocode incorporating all these checks. Use nested IF-THEN structures and loops. then Convert this pseudocode into Graphviz DOT language AND Mermaid flowchart syntax. Represent every control point with a diamond shape.
+
+AI Response: 
+Explained the 5-step general flow and the 5 specific validation checks. Provided the requested pseudocode using strictly nested IF-THEN structures for the validation sequence. Supplied the Graphviz DOT and Mermaid flowchart codes, ensuring every single control point was explicitly represented with a diamond shape as requested.
