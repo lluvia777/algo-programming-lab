@@ -1,0 +1,28 @@
+graph TD
+    Start([START]) --> LoginPrompt[/READ credentials/]
+    LoginPrompt --> CheckLogin{credentials == valid?}
+    CheckLogin -- NO --> LoginPrompt
+    
+    CheckLogin -- YES --> ReadCourse[/READ course_code/]
+    ReadCourse --> CheckDone{course_code == 'DONE'?}
+    
+    CheckDone -- NO --> CheckQuota{quota > 0?}
+    CheckQuota -- NO --> ReadCourse
+    
+    CheckQuota -- YES --> CheckPrereq{prerequisite == TRUE?}
+    CheckPrereq -- NO --> ReadCourse
+    
+    CheckPrereq -- YES --> CheckConflict{conflict == FALSE?}
+    CheckConflict -- NO --> ReadCourse
+    
+    CheckConflict -- YES --> CheckCredit{total_credits <= MAX?}
+    CheckCredit -- NO --> ReadCourse
+    
+    CheckCredit -- YES --> CheckAdvisor{advisor == TRUE?}
+    CheckAdvisor -- NO --> ReadCourse
+    
+    CheckAdvisor -- YES --> AddCourse[Add Course & Update Credits]
+    AddCourse --> ReadCourse
+    
+    CheckDone -- YES --> Finalize[/PRINT 'Registration finalized'/]
+    Finalize --> End([END])
