@@ -1,0 +1,44 @@
+graph TB
+    Start([START]) --> InitVars[Initialize: logged_in=FALSE, cart_total=0]
+    
+    InitVars --> LoginPrompt[/PRINT 'Please log in', READ credentials/]
+    LoginPrompt --> LoginCheck{credentials == valid?}
+    LoginCheck -- YES --> SetLoginTrue[logged_in = TRUE]
+    LoginCheck -- NO --> LoginError[/PRINT 'Invalid login'/]
+    LoginError --> LoginPrompt
+    
+    SetLoginTrue --> ProductPrompt[/PRINT 'Enter product or DONE', READ product_input/]
+    ProductPrompt --> CheckDone{product_input == 'DONE'?}
+    
+    CheckDone -- NO --> CheckStock{stock > 0?}
+    CheckStock -- YES --> AddCart[cart_total = cart_total + price, Decrease stock]
+    AddCart --> PrintAdded[/PRINT 'Product added'/]
+    PrintAdded --> ProductPrompt
+    CheckStock -- NO --> StockError[/PRINT 'Out of stock'/]
+    StockError --> ProductPrompt
+    
+    CheckDone -- YES --> SetShoppingComplete[shopping_complete = TRUE]
+    SetShoppingComplete --> AskDiscount[/PRINT 'Discount code?', READ has_discount/]
+    
+    AskDiscount --> CheckHasDiscount{has_discount == 'YES'?}
+    CheckHasDiscount -- YES --> ReadCode[/READ code/]
+    ReadCode --> CheckCode{code == valid_code?}
+    CheckCode -- YES --> ApplyDiscount[cart_total = cart_total - discount]
+    ApplyDiscount --> CheckShipping
+    CheckCode -- NO --> InvalidCode[/PRINT 'Invalid code'/]
+    InvalidCode --> CheckShipping
+    
+    CheckHasDiscount -- NO --> CheckShipping{cart_total < 500?}
+    
+    CheckShipping -- YES --> AddShipping[cart_total = cart_total + 50]
+    AddShipping --> ShowTotal
+    CheckShipping -- NO --> FreeShipping[/PRINT 'Free shipping!'/]
+    FreeShipping --> ShowTotal
+    
+    ShowTotal[/PRINT 'Total to pay', READ process_payment/] --> CheckPayment{process_payment == 'YES'?}
+    
+    CheckPayment -- YES --> Success[/PRINT 'Payment successful'/]
+    Success --> End([END])
+    
+    CheckPayment -- NO --> Cancel[/PRINT 'Payment cancelled'/]
+    Cancel --> End
