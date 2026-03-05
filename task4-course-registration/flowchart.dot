@@ -1,0 +1,49 @@
+digraph Course_Registration {
+    rankdir=TB;
+    node [fontname="Helvetica", fontsize=10];
+    
+    Start [shape=oval, label="START"];
+    End [shape=oval, label="END"];
+    
+    LoginPrompt [shape=parallelogram, label="READ credentials"];
+    CheckLogin [shape=diamond, label="credentials == valid?"];
+    
+    ReadCourse [shape=parallelogram, label="READ course_code"];
+    CheckDone [shape=diamond, label="course_code == 'DONE'?"];
+    
+    CheckQuota [shape=diamond, label="quota > 0?"];
+    CheckPrereq [shape=diamond, label="prerequisite == TRUE?"];
+    CheckConflict [shape=diamond, label="conflict == FALSE?"];
+    CheckCredit [shape=diamond, label="total_credits <= MAX?"];
+    CheckAdvisor [shape=diamond, label="advisor == TRUE?"];
+    
+    AddCourse [shape=box, label="Add Course & Update Credits"];
+    Finalize [shape=parallelogram, label="PRINT 'Registration finalized'"];
+    
+    Start -> LoginPrompt;
+    LoginPrompt -> CheckLogin;
+    CheckLogin -> ReadCourse [label="YES"];
+    CheckLogin -> LoginPrompt [label="NO"];
+    
+    ReadCourse -> CheckDone;
+    CheckDone -> Finalize [label="YES"];
+    CheckDone -> CheckQuota [label="NO"];
+    
+    CheckQuota -> CheckPrereq [label="YES"];
+    CheckQuota -> ReadCourse [label="NO"];
+    
+    CheckPrereq -> CheckConflict [label="YES"];
+    CheckPrereq -> ReadCourse [label="NO"];
+    
+    CheckConflict -> CheckCredit [label="YES"];
+    CheckConflict -> ReadCourse [label="NO"];
+    
+    CheckCredit -> CheckAdvisor [label="YES"];
+    CheckCredit -> ReadCourse [label="NO"];
+    
+    CheckAdvisor -> AddCourse [label="YES"];
+    CheckAdvisor -> ReadCourse [label="NO"];
+    
+    AddCourse -> ReadCourse;
+    Finalize -> End;
+}
