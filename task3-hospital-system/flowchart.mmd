@@ -1,0 +1,40 @@
+graph TD
+    Start([START]) --> MainMenu[/PRINT '1: Appointment, 2: Test Results', READ menu_choice/]
+    MainMenu --> MenuCheck{menu_choice?}
+    
+    MenuCheck -- "1" --> ApptID
+    MenuCheck -- "2" --> TestID
+    MenuCheck -- "Other" --> InvalidChoice[/PRINT 'Invalid choice'/]
+    
+    subgraph Appointment System
+        ApptID[/READ patient_id/] --> ApptVerify{verify_identity == TRUE?}
+        ApptVerify -- YES --> SelectClinic[/READ clinic/]
+        ApptVerify -- NO --> ApptFail[/PRINT 'Verification Failed'/]
+        SelectClinic --> SelectDoctor[/READ doctor/]
+        SelectDoctor --> SelectSlot[/READ time_slot/]
+        SelectSlot --> ApptConfirm{confirm == 'YES'?}
+        ApptConfirm -- YES --> SendSMS[Confirm & Send SMS]
+        ApptConfirm -- NO --> CancelAppt[/PRINT 'Cancelled'/]
+    end
+    
+    subgraph Test Result System
+        TestID[/READ patient_id/] --> TestVerify{verify_identity == TRUE?}
+        TestVerify -- YES --> TestsExist{tests_exist == TRUE?}
+        TestVerify -- NO --> TestFail[/PRINT 'Verification Failed'/]
+        TestsExist -- YES --> ResultsReady{results_ready == TRUE?}
+        TestsExist -- NO --> NoTests[/PRINT 'No tests found'/]
+        ResultsReady -- YES --> ShowResults[/PRINT 'Displaying Results'/]
+        ResultsReady -- NO --> WaitMessage[/PRINT 'Results not ready'/]
+        ShowResults --> AskPDF{download_pdf == 'YES'?}
+        AskPDF -- YES --> DownloadPDF[Download PDF]
+    end
+    
+    ApptFail --> End([END])
+    SendSMS --> End
+    CancelAppt --> End
+    TestFail --> End
+    NoTests --> End
+    WaitMessage --> End
+    DownloadPDF --> End
+    AskPDF -- NO --> End
+    InvalidChoice --> End
