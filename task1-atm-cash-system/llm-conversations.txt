@@ -1,0 +1,17 @@
+Prompt 1: 
+simdi seninle algo ve programlama dersimin lab odevini yapacagiz beraber hocamiz bizden github repo hazirlamayi da ogrenmemizi istiyou ben 0 im simdi sana gorevi aticam beraber yapmaya baslayalim...
+
+AI Response: 
+Helped with setting up the GitHub repository step-by-step and explained how to create folders and files directly via the web interface.
+
+Prompt 2: 
+Write detailed pseudocode for an ATM cash withdrawal system. It must include: PIN verification (3 attempts), balance check, amount validation (multiples of 20TL), daily limit check, and option to repeat the transaction. Use START, READ, PRINT, IF-THEN, and LOOP constructs for every step then Convert this pseudocode into Graphviz DOT language AND into Mermaid flowchart syntax.
+
+AI Response: 
+Provided the requested pseudocode.md, flowchart.dot, and flowchart.mmd files using standard English programming terminology, appropriate shapes (oval, parallelogram, box, diamond), and correct algorithmic logic.
+
+Prompt 3: 
+png kismini yapalim hocanin istedigi tum sartlari yaptik mi diye kontreol de et
+
+AI Response: 
+Confirmed all assignment logic conditions were met. Provided step-by-step instructions on how to use GraphvizOnline and Mermaid Live to generate the .png files and upload them to the GitHub repository. Guided through troubleshooting the GitHub preview feature for .mmd files.
