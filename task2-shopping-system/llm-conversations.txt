@@ -1,0 +1,11 @@
+Prompt: 
+Explain step by step how an e-commerce cart management and checkout system works. It should cover user login, adding products, stock checking, applying a discount code, shipping fee calculation, and payment and thenn Write this system as pseudocode. Use LOOP for loops and IF-THEN for conditions. Start each block with START and end with END. Identify all control points then Convert the pseudocode into both Graphviz DOT format (rankdir=TB) and Mermaid flowchart syntax. Do not forget YES/NO labels at every decision point.
+
+AI Response: 
+Broke down the e-commerce logic into 6 distinct control points (Login, Product/Stock, Discount, Shipping, Payment). Provided the complete pseudocode using START/END, LOOP, and IF-THEN structures. Translated the logic into Graphviz DOT (using rankdir=TB for vertical layout) and Mermaid flowchart syntax, ensuring all decision diamonds strictly included YES/NO labels as requested.
+
+Prompt: 
+gorselleri halletim readme gecelim
+
+AI Response: 
+Provided the README.md content summarizing the sequential control points and personal notes about learning top-to-bottom (rankdir=TB) flowchart design. Also provided the AI conversation log for Task 2.
